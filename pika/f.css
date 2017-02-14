@@ -1,0 +1,49 @@
+.row{
+    margin-bottom: -5px;
+}
+.row div{
+    margin: 0;
+    height: 50px;
+    width: 50px;
+    border: 1px solid white;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+    background-color: white;
+
+}
+
+.row .wall{
+    background-image: url('wall.gif');
+
+}
+.row .grass{
+    background-image: url('grass.png');
+}
+.row .water{
+    background-image: url('water.gif');
+}
+.row .egg{
+    background-image: url('egg.gif');
+    background-color:  #659243;
+}
+.row .tran{
+    background-image: url('tran.gif');
+    background-color:  #659243;
+}
+.row .diz{
+    background-image: url('diz.gif');
+    background-size:contain;
+    background-color:  #659243;
+}
+.row .white{
+    background-color: white;
+}
+.row .Pikaman{
+    background-image: url('pika.gif');
+    background-color: #659243;
+}
+.row .ball{
+    background-image: url('ball.png');
+    background-color: #659243;
+}

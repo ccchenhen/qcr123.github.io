@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>pika3</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="f.css">
+    </head>
+    <body>
+        <h1 >Your hearts:</h1>
+        <div id="heart"></div>
+        <div id="world"></div>
+        <div id='bullet'></div>
+        <img src="die.png" alt="die" id="die">
+        <img src="win.png" alt="win" id="win">
+        <!-- <img src="die.png" alt="die" id="die"> -->
+        <h2>Rules</h2>
+        <h3>You must use the Pokeball to catch the Mew.</h3>
+    </body>
+
+    <script>
+        var map = [
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,1,4,1,4,4,1,7,2,4,1,1,0,1,1,1,0,1,4,1,4,1,0,1,0],
+                [0,9,0,5,0,0,1,0,2,4,2,4,0,4,0,4,1,4,0,4,0,1,1,4,0],
+                [0,1,4,1,0,4,1,7,2,1,2,1,0,4,0,1,0,0,0,4,0,0,0,6,0],
+                [0,0,0,0,0,0,2,1,0,0,0,1,0,4,0,4,0,1,4,1,0,4,1,1,0],
+                [0,2,1,1,1,1,7,2,2,2,0,4,0,0,0,4,0,0,1,0,0,1,4,0,0],
+                [0,2,1,4,4,1,1,2,2,2,4,4,0,4,1,4,1,1,4,1,4,1,0,4,0],
+                [0,2,1,1,4,4,1,2,2,2,0,1,0,0,1,1,1,0,4,0,0,1,0,1,0],
+                [0,2,1,1,1,1,1,2,2,2,0,4,0,0,1,0,1,0,1,0,0,1,0,1,0],
+                [0,2,1,2,2,2,2,2,0,2,0,1,1,4,4,0,1,4,1,4,0,1,1,4,0],
+                [0,2,4,2,2,4,1,1,4,2,2,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+                [0,1,2,7,4,1,0,0,1,2,2,1,4,1,2,2,2,2,4,4,4,1,4,1,0],
+                [0,2,7,2,0,1,0,1,1,4,2,7,1,1,2,1,1,2,7,1,4,1,0,4,0],
+                [0,2,1,4,0,0,4,1,0,0,2,2,2,2,2,4,1,7,2,4,2,0,0,0,0],
+                [0,1,1,1,4,1,4,4,1,4,1,1,2,7,1,0,1,4,2,7,1,4,1,1,0],
+                [0,1,0,0,0,0,0,0,1,1,0,0,2,1,4,4,1,2,2,2,2,2,1,4,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            ]
+
+        var newmap = deepCopy(map);
+        var heart = 6;
+        function hearts(){
+            var heartStr = " ";
+            for (var i = 0; i < heart ; i++) {
+                heartStr += '<p></p>';
+            }
+            document.getElementById('heart').innerHTML=heartStr;
+        }
+        hearts();
+        var bullet = [
+            {x:8,y: 145},
+            {x:8,y:247},
+            {x:632,y:146},
+            {x:216,y:247},
+            {x:788,y:94},
+            {x:424,y:655},
+            {x:8,y:400},
+            {x:8,y:808}];
+
+        function world() {
+            var htmlStr = "";
+            for (var y= 0; y < map.length; y++) {
+                htmlStr += '<div class="row">'
+                for (var x = 0; x < map[y].length; x++) {
+                    if (map[y][x] == 0) {
+                                htmlStr += '<div class="wall"></div>';
+                            }
+                            else if (map[y][x] == 1) {
+                                htmlStr += '<div class="grass"></div>';
+                            }
+                            else if (map[y][x] == 2) {
+                                htmlStr += '<div class="water"></div>';
+                            }
+                            else if (map[y][x] == 4) {
+                                htmlStr += '<div class="egg"></div>';
+                            }
+                            else if (map[y][x] == 5) {
+                                htmlStr += '<div class="tran"></div>';
+                            }
+                            else if (map[y][x] == 6) {
+                                htmlStr += '<div class="ball"></div>';
+                            }
+                            else if (map[y][x] == 7) {
+                                htmlStr += '<div class="diz"></div>';
+                            }
+                            else if (map[y][x] == 8) {
+                                htmlStr += '<div class="white"></div>';
+                            }
+                            else if(map[y][x] == 9){
+                                htmlStr += '<div class="Pikaman"></div>';
+                            }
+                }
+                htmlStr += '</div>';
+                document.getElementById('world').innerHTML=htmlStr;
+            }
+        }
+        world();
+        //**********************************************************************
+        function bullett() {
+            function bulletAndDog() {
+                for(var i = 0; i < bullet.length; ++i){
+                //   console.log("hi");
+                  var pacTop = document.getElementsByClassName('Pikaman')[0].offsetTop;
+                //   console.log(pacTop);
+                  var pacLeft = document.getElementsByClassName('Pikaman')[0].offsetLeft;
+                //   console.log(pacLeft);
+                  var bulletTop = document.getElementsByClassName('bullet')[i].style.top.slice(0,-2);
+                //   console.log(bulletTop);
+                  var bulletLeft = document.getElementsByClassName('bullet')[i].style.left.slice(0,-2);
+                //   console.log(bulletLeft);
+                  if(pacLeft == bulletLeft && pacTop == bulletTop){
+                    // alert("you are die!");
+                    // restart();
+                    die();
+                    }
+                }
+            }
+            function bullets() {
+                var output = '';
+                for(var i = 0; i < bullet.length; ++ i){
+                output += "<div class='bullet' style = 'top:"+ bullet[i].y+"px; left:"+bullet[i].x+"px;'></div>";
+                document.getElementById('bullet').innerHTML = output;
+                }
+            }
+
+            function bulletrun() {
+                bullet[0].x += 52;
+                if(bullet[0].x >632) {
+                bullet[0].y = 145;
+                bullet[0].x = 8;
+                }
+            }
+
+            function bulletrun2() {
+                    //   for(var i = 0; i < bullet.length ; i ++) {
+            bullet[1].x += 52;
+                if(bullet[1].x > 260) {
+                bullet[1].y = 247;
+                bullet[1].x = 8;
+                }
+            }
+
+            function bulletrun3() {
+                //   for(var i = 0; i < bullet.length ; i ++) {
+            bullet[2].x += 52;
+                if(bullet[2].x > 840) {
+                bullet[2].y = 145;
+                bullet[2].x = 632;
+                }
+            }
+
+            function bulletrun4() {
+            //   for(var i = 0; i < bullet.length ; i ++) {
+                bullet[3].x += 52;
+                if(bullet[3].x > 632) {
+                bullet[3].y = 247;
+                bullet[3].x = 216;
+                }
+            }
+
+            function bulletrun5() {
+        //   for(var i = 0; i < bullet.length ; i ++) {
+                bullet[4].y += 51;
+                if(bullet[4].y > 490) {
+                bullet[4].y = 94;
+                bullet[4].x = 788;}
+            }
+
+            function bulletrun6() {
+  //   for(var i = 0; i < bullet.length ; i ++) {
+            bullet[5].x += 52;
+                if(bullet[5].x > 1256) {
+                bullet[5].y = 655;
+                bullet[5].x = 424;
+                }
+            }
+            function bulletrun8() {
+      //   for(var i = 0; i < bullet.length ; i ++) {
+            bullet[6].x += 52;
+            if(bullet[6].x >632) {
+                bullet[6].y = 400;
+                bullet[6].x = 8;
+                }
+            }
+            function bulletrun9() {
+      //   for(var i = 0; i < bullet.length ; i ++) {
+            bullet[7].x += 52;
+            if(bullet[7].x > 788) {
+                bullet[7].y = 808;
+                bullet[7].x = 8;
+                }
+            }
+
+            function loop() {
+                    bullets();
+                    bulletAndDog();
+                    bulletrun();
+                    bulletrun2();
+                    bulletrun3();
+                    bulletrun4();
+                    bulletrun5();
+                    bulletrun6();
+                    bulletrun8();
+                    bulletrun9();
+                }
+                setInterval(loop,300)
+            }
+            bullett();
+            //**************************************************************************
+            function die(){
+                document.getElementById('die').style.display = "inline";
+                setTimeout(function(){
+                    document.getElementById('die').style.display = "none";
+                    restart();
+                },3000);
+            }
+            function win(){
+                document.getElementById('win').style.display = "inline";
+                setTimeout(function(){
+                    document.getElementById('win').style.display = "none";
+                    restart();
+                },1000);
+            }
+        //*****************************************************************************
+        function reset() {
+            heart --;
+        }
+
+        function restart() {
+            map = deepCopy(newmap);
+            Pikaman = {y : 2, x : 1}
+            heart = 6
+            hearts()
+            world();
+        }
+
+        function deepCopy(arr) {
+            let out = [], i = 0, len = arr.length;
+            for (; i < len; i++) {
+                if (arr[i] instanceof Array){
+                    out[i] = deepCopy(arr[i]);
+                }
+                else out[i] = arr[i];
+            }
+            return out;
+        }
+
+        var Pikaman = {
+        y : 2,
+        x : 1
+        }, counts = 0;
+        var key = 0;
+        document.onkeydown = function(e){
+            var right = map[Pikaman.y][Pikaman.x+1],
+                left = map[Pikaman.y][Pikaman.x-1],
+                up = map[Pikaman.y-1][Pikaman.x],
+                down = map[Pikaman.y+1][Pikaman.x];
+
+
+
+            if (e.keyCode == 37 && left!== 0 && left!== 2) {
+                if(key == 0 && left == 5){
+                    // alert("die!!!");
+                    // reset();
+                    die();
+                }
+                // console.log('LIFT');
+                if (left == 6) {
+                   key ++;
+                   console.log(key);
+               }
+               if(key == 1 && left == 5) {
+                //    alert("win!!");
+                //    restart();
+                    win();
+               }
+                else if (left == 7) {
+                    map[Pikaman.y][Pikaman.x] = 1;
+                    Pikaman.x -= 3;
+                    map[Pikaman.y][Pikaman.x] = 9;
+                }
+                else{
+                    map[Pikaman.y][Pikaman.x] = 1;
+                    Pikaman.x -= 1;
+                    map[Pikaman.y][Pikaman.x] = 9;
+                }
+                world();
+                document.getElementsByClassName('Pikaman')[0].style.transform = "rotateY(180deg)";
+                counts += 1;
+                if ( counts%3 == 0) {
+                    heart--;
+                    hearts();
+                }
+                if (left== 4 && heart <6){
+                    heart++;
+                    hearts();
+                }
+                if (!heart) {
+                    // alert("die!!!!!")
+                    // restart();
+                    die();
+                }
+            }
+
+            else if (e.keyCode == 38 && up !== 0 &&  up !== 2) {
+                // console.log('UP');
+                if(key == 0&&up == 5){
+                    // alert("die!!!");
+                    // reset();
+                    die();
+
+                }
+                if (up == 6) {
+                   key ++;
+                   console.log(key);
+               }
+               if(key == 1&& up == 5) {
+                //    alert("win!!")
+                //    restart();
+                    win();
+               }
+                else if (up == 7) {
+                    map[Pikaman.y][Pikaman.x] = 1;
+                    Pikaman.y -= 3;
+                    map[Pikaman.y][Pikaman.x] = 9;
+                }
+                else{
+                    map[Pikaman.y][Pikaman.x] = 1;
+                    Pikaman.y -= 1;
+                    map[Pikaman.y][Pikaman.x] = 9;
+                }
+                world();
+                document.getElementsByClassName('Pikaman')[0].style.transform = "rotate(-90deg)";
+                counts += 1;
+                if ( counts%3 == 0) {
+                    heart--;
+                    hearts();
+                }
+                if (up == 4&& heart<6){
+                    heart++;
+                    hearts();
+                }
+                if (!heart) {
+                    // alert("die!!!!!")
+                    // restart();
+                    die();
+                }
+
+            }
+
+            else if (e.keyCode == 39 && right !== 0&& right!==2) {
+                // console.log('RIGHT');
+                if(key == 0&&right == 5){
+                    // alert("die!!!");
+                    // restart();
+                    die();
+                }
+                if (right == 6) {
+                   key ++;
+                   console.log(key);
+               }
+               if(key == 1&& right == 5) {
+                //    alert("win!!")
+                //    restart();
+                    win();
+               }
+                else if (right == 7) {
+                    map[Pikaman.y][Pikaman.x] = 1;
+                    Pikaman.x += 3;
+                    map[Pikaman.y][Pikaman.x] = 9;
+                }
+                else {
+                    map[Pikaman.y][Pikaman.x] = 1;
+                    Pikaman.x += 1;
+                    map[Pikaman.y][Pikaman.x] = 9;
+                }
+                world();
+                counts += 1;
+                if ( counts%3 == 0) {
+                    heart--;
+                    hearts();
+                }
+                if (right == 4&& heart<6){
+                    heart++;
+                    hearts();
+                }
+                if (!heart) {
+                    // alert("die!!!!!")
+                    // restart();
+                    die();
+                }
+                // document.getElementsByClassName('Pikaman')[0].style.transform = "rotate(180deg)"
+            }
+            else if (e.keyCode == 40 && down !==0&& down!==2) {
+                // console.log('DOWN');
+                if(key == 0&&down == 5){
+                    // alert("die!!!");
+                    // restart();
+                    die();
+                }
+                if (down == 6) {
+                   key ++;
+                   console.log(key);
+               }
+               if(key == 1&& down == 5) {
+                //    alert("win!!")
+                //    restart();
+                    win();
+               }
+                else if (down == 7) {
+                    map[Pikaman.y][Pikaman.x] = 1;
+                    Pikaman.y += 3;
+                    map[Pikaman.y][Pikaman.x] = 9;
+                }
+                else {
+                    map[Pikaman.y][Pikaman.x] = 1;
+                    Pikaman.y += 1;
+                    map[Pikaman.y][Pikaman.x] = 9;
+                }
+                world();
+                document.getElementsByClassName('Pikaman')[0].style.transform = "rotate(90deg)";
+                counts += 1;
+                if ( counts%3 == 0) {
+                    heart--;
+                    hearts();
+                }
+                if (down == 4&& heart<6){
+                    heart++;
+                    hearts();
+                }
+                if (!heart) {
+                    // alert("die!!!!!")
+                    // restart();
+                    die();
+                }
+
+            }
+        }
+
+    </script>
+</html>

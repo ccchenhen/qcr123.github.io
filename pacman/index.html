@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pacman</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="wrapper">
+        <h2>Coins: <span id="coin"></span>Life: <span id="life"></span></h2>
+        <div id="world"></div>
+    </div>
+</body>
+<script>
+    let map = [
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,0,0,1,1,0],
+        [0,1,1,0,0,0,1,6,1,0,1,1,1,1,1,1,1,1,0,0,1,1,1,0],
+        [0,0,1,1,1,1,1,0,1,0,1,6,1,1,0,1,1,1,0,1,1,1,0,0],
+        [0,0,1,1,1,1,1,0,1,0,1,1,0,0,0,1,1,1,0,1,1,1,0,0],
+        [0,1,1,0,0,1,0,0,1,0,1,1,1,1,0,0,1,6,0,1,1,1,0,0],
+        [0,1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,1,1,0,1,1,1,1,0],
+        [0,1,1,1,0,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,0],
+        [0,1,0,1,0,1,1,0,1,1,1,1,1,1,1,1,0,0,1,1,6,1,1,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] ],
+        counts = 0,
+        coin = 0,
+        life = 2,
+        resetMap = deepCopy(map);
+
+    function world() {
+        let htmlStr = "";
+        for (let row of map) {
+            htmlStr += '<div class="row">'
+            for (let col of row) {
+                switch (col) {
+                    case 0:
+                        htmlStr += '<div class="wall"></div>';
+                        break;
+                    case 1:
+                        htmlStr += '<div class="coin"></div>';
+                        break;
+                    case 2:
+                        htmlStr += '<div class="Pacman"></div>';
+                        break;
+                    case 3:
+                        htmlStr += '<div class="white"></div>';
+                        break;
+                    case 4:
+                        htmlStr += '<div class="ghost"></div>';
+                        break;
+                    case 6:
+                        htmlStr += '<div class="cherry"></div>'
+                        break;
+                }
+            }
+            htmlStr += '</div>';
+        }
+        document.getElementById('world').innerHTML = htmlStr;
+        document.getElementById('coin').innerHTML = counts;
+        document.getElementById('life').innerHTML = life;
+    }
+    world();
+// ***********************************************************************************
+    let Pacman = { y : 1, x : 1 };
+    document.onkeydown = e => {
+        let up = map[Pacman.y-1][Pacman.x],
+            down = map[Pacman.y+1][Pacman.x],
+            left = map[Pacman.y][Pacman.x-1],
+            right = map[Pacman.y][Pacman.x+1];
+
+        if(e.keyCode == 37 && left != 0) {
+            if(left == 4)  {
+                if(life) reset();
+                else restart();
+            }
+            else {
+                if(left == 1) {
+                    counts += 1;
+                    coin ++;
+                }
+                if(left == 6) {
+                    counts += 10;
+                    life ++;
+                }
+                map[Pacman.y][Pacman.x--] = 3;
+                map[Pacman.y][Pacman.x] = 2;
+            }
+            world();
+        }
+        if(e.keyCode == 38 && up != 0) {  // UP
+            if(up == 4)  {
+                if(life) reset();
+                else restart();
+            }
+            else {
+                if(up == 1) {
+                    counts += 1;
+                    coin ++;
+                }
+                if(up == 6) {
+                    counts += 10;
+                    life ++;
+                }
+                map[Pacman.y--][Pacman.x] = 3;
+                map[Pacman.y][Pacman.x] = 2;
+            }
+            world();
+            document.getElementsByClassName('Pacman')[0].style.transform = "rotate(90deg)";
+        }
+        if(e.keyCode == 39 && right != 0) {  // RIGHT
+            if(right == 4)  {
+                if(life) reset();
+                else restart();
+            }
+            else {
+                if(right == 1)  {
+                    counts += 1;
+                    coin ++;
+                }
+                if(right == 6) {
+                    counts += 10;
+                    life ++;
+                }
+                map[Pacman.y][Pacman.x++] = 3;
+                map[Pacman.y][Pacman.x] = 2;
+            }
+            world();
+            document.getElementsByClassName('Pacman')[0].style.transform = "rotateY(180deg)"
+        }
+        if(e.keyCode == 40 && down != 0) {  // DOWN
+            if(down == 4)  {
+                if(life) reset();
+                else restart();
+            }
+            else {
+                if(down == 1)  {
+                    counts += 1;
+                    coin ++;
+                }
+                if(down == 6) {
+                    counts += 10;
+                    life ++;
+                }
+                map[Pacman.y++][Pacman.x] = 3;
+                map[Pacman.y][Pacman.x] = 2;
+            }
+            world();
+            document.getElementsByClassName('Pacman')[0].style.transform = "rotate(-90deg)";
+        }
+        if(coin == 124) {
+            alert("YOU WIN!! Wanna another try?");
+            restart();
+        }
+    }
+// ==================================================================================
+    let ghost = { y: 1, x: 18 }, temp = 3;
+    function ghostRun()
+	{
+        let up = map[ghost.y-1][ghost.x],
+            down = map[ghost.y+1][ghost.x],
+            left = map[ghost.y][ghost.x-1],
+            right = map[ghost.y][ghost.x+1],
+            ghostNum = Math.floor(Math.random()*4);
+
+        if(ghostNum == 0 && up != 0) {  // UP
+            map[ghost.y][ghost.x] = temp;
+            if(up == 2) {
+                if(life) {
+                    reset();
+                    temp = 3;
+                    ghost.y -= 1;
+                    map[ghost.y][ghost.x] = 4;
+                }
+                else  {
+                    alert(`You lost the game! Restart and Good Luck!`);
+                    restart();
+                }
+            }
+            else {
+                temp = up;
+                ghost.y -= 1;
+                map[ghost.y][ghost.x] = 4;
+            }
+        }
+        if(ghostNum == 1 && right != 0) {  // RIGHT
+            map[ghost.y][ghost.x] = temp;
+            if(right == 2) {
+                if(life) {
+                    reset();
+                    temp = 3;
+                    ghost.x += 1;
+                    map[ghost.y][ghost.x] = 4;
+                }
+                else  {
+                    alert(`You lost the game! Restart and Good Luck!`);
+                    restart();
+                }
+            }
+            else {
+                temp = right;
+                ghost.x += 1;
+                map[ghost.y][ghost.x] = 4;
+            }
+        }
+        if(ghostNum == 2 && down != 0) {  // DOWN
+            map[ghost.y][ghost.x] = temp;
+            if(down == 2) {
+                if(life) {
+                    reset();
+                    temp = 3;
+                    ghost.y += 1;
+                    map[ghost.y][ghost.x] = 4;
+                }
+                else  {
+                    alert(`You lost the game! Restart and Good Luck!`);
+                    restart();
+                }
+            }
+            else {
+                temp = down;
+                ghost.y += 1;
+                map[ghost.y][ghost.x] = 4;
+            }
+        }
+        if(ghostNum == 3 && left != 0) {  // LEFT
+            map[ghost.y][ghost.x] = temp;
+            if(left == 2) {
+                if(life) {
+                    reset();
+                    temp = 3;
+                    ghost.x -= 1;
+                    map[ghost.y][ghost.x] = 4;
+                }
+                else  {
+                    alert(`You lost the game! Restart and Good Luck!`);
+                    restart();
+                }
+            }
+            else {
+                temp = left;
+                ghost.x -= 1;
+                map[ghost.y][ghost.x] = 4;
+            }
+        }
+        world();
+	}
+
+    function reset() {
+        life --;
+        alert(`You have ${life} ${life < 2 ? 'life' : 'lives'} left! Try Again!`);
+        map[Pacman.y][Pacman.x] = 3;
+        Pacman.x = Pacman.y = 1;
+        map[1][1] = 2;
+    }
+
+    function restart() {
+        map = deepCopy(resetMap);
+        Pacman = { y: 1, x: 1 };
+        ghost = { y: 1, x: 18 };
+        temp = 3, life = 2, coin = 0, counts = 0;
+    }
+
+    function deepCopy(arr) {
+        let out = [], i = 0, len = arr.length;
+        for (; i < len; i++) {
+            if (arr[i] instanceof Array){
+                out[i] = deepCopy(arr[i]);
+            }
+            else out[i] = arr[i];
+        }
+        return out;
+    }
+
+	setInterval(ghostRun, 350);
+</script>
+</html>

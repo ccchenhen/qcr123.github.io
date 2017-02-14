@@ -1,0 +1,85 @@
+.row{
+    margin-bottom: -5px;
+}
+.row div{
+    margin: 0;
+    height: 50px;
+    width: 50px;
+    border: 1px solid white;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+    background-color: white;
+
+}
+
+h1, #heart{
+    display: inline-block;
+}
+img {
+    position: absolute;
+    top: 200px;
+    left: 400px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #fed136;
+    display: none;
+    z-index: 1000;
+}
+p {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: auto;
+    background-size: contain;
+    background-image: url('heart.png');
+}
+.row .wall{
+    background-image: url('wall.gif');
+
+}
+.row .grass{
+    background-image: url('grass.png');
+}
+.row .water{
+    background-image: url('water.gif');
+}
+.row .egg{
+    background-image: url('egg.gif');
+    background-color: #659243;
+}
+.row .tran{
+    background-image: url('tran.gif');
+    background-color:  #659243;
+}
+.row .white{
+    background-color: white;
+}
+.row .spring{
+   background-image: url('diz.gif');
+   background-color:#659243;
+   background-position: center;
+}
+.row .diz{
+    background-image: url('diz.gif');
+    background-size:contain;
+    background-position: center;
+    background-color:  #659243;
+}
+.row .Pikaman{
+    background-image: url('pika.gif');
+    background-color: #659243;
+}
+.row .ball{
+    background-image: url('ball.png');
+    background-position: center;
+}
+.bullet{
+        background-image: url('gost.gif');
+        background-size: contain;
+        background-position: center;
+        position: absolute;
+        margin:5px;
+        height: 40px;
+        width: 40px;
+        }

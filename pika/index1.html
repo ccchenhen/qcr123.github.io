@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>pika1</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1 >Your hearts:</h1>
+        <div id="heart"></div>
+        <div id="world"></div>
+        <div id='bullet'></div>
+        <img src="die.png" alt="die" id="die">
+        <img src="win.png" alt="win" id="win">
+        <h2>Rules</h2>
+        <h3>1.You will lose one heart for every three moves.</h3>
+        <h3>2.You will gain one heart by eatting an egg. </h3>
+        <h3>3.You win once you get Pokeball.</h3>
+    </body>
+
+    <script>
+        var map = [
+       [0,0,0,0,0,0,8,8,0,0,0,0,0,0],
+       [0,9,1,1,1,0,8,8,0,1,4,4,1,0],
+       [0,1,0,0,1,0,0,0,0,1,2,1,6,0],
+       [0,1,0,0,1,1,4,4,1,1,1,1,1,0],
+       [0,1,4,4,4,0,0,0,0,1,0,1,1,0],
+       [0,0,0,0,0,0,8,8,0,4,4,4,1,0],
+       [8,8,8,8,8,8,8,8,0,0,0,0,0,0],
+        ]
+
+        var newmap = deepCopy(map);
+        var heart = 6;
+        function hearts(){
+            var heartStr = " ";
+            for (var i = 0; i < heart ; i++) {
+                heartStr += '<p></p>';
+            }
+            document.getElementById('heart').innerHTML=heartStr;
+        }
+        hearts();
+
+        var bullet = [{x:216,y: 94},{x:425,y:298},{x:425,y:196}];
+
+        function world() {
+            var htmlStr = "";
+            for (var y= 0; y < map.length; y++) {
+                htmlStr += '<div class="row">'
+                for (var x = 0; x < map[y].length; x++) {
+                    if (map[y][x] == 0) {
+                        htmlStr += '<div class="wall"></div>';
+                    }
+                    else if (map[y][x] == 1) {
+                        htmlStr += '<div class="grass"></div>';
+                    }
+                    else if (map[y][x] == 2) {
+                        htmlStr += '<div class="water"></div>';
+                    }
+                    else if(map[y][x] == 4){
+                        htmlStr += '<div class="egg"></div>';
+                    }
+                    else if (map[y][x] == 6) {
+                        htmlStr += '<div class="ball"></div>';
+                    }
+                    else if (map[y][x] == 8) {
+                        htmlStr += '<div class="white"></div>';
+                    }
+                    else if(map[y][x] == 9){
+                        htmlStr += '<div class="Pikaman"></div>';
+                    }
+                }
+                htmlStr += '</div>';
+                document.getElementById('world').innerHTML=htmlStr;
+            }
+        }
+        world();
+        //****************************************************
+        function die(){
+            document.getElementById('die').style.display = "inline";
+            setTimeout(function(){
+                document.getElementById('die').style.display = "none";
+                restart();
+            },3000);
+        }
+        function win(){
+            document.getElementById('win').style.display = "inline";
+            setTimeout(function(){
+                document.getElementById('win').style.display = "none";
+                restart();
+            },1000);
+        }
+//*********************************************************
+        function bullett() {
+            function bulletAndDog() {
+                for(var i = 0; i < bullet.length; ++i){
+                    console.log("hi");
+                    var pacTop = document.getElementsByClassName('Pikaman')[0].offsetTop;
+                    console.log(pacTop);
+                    var pacLeft = document.getElementsByClassName('Pikaman')[0].offsetLeft;
+                    console.log(pacLeft);
+                    var bulletTop = document.getElementsByClassName('bullet')[i].style.top.slice(0,-2);
+                    console.log(bulletTop);
+                    var bulletLeft = document.getElementsByClassName('bullet')[i].style.left.slice(0,-2);
+                    console.log(bulletLeft);
+                    if(pacLeft == bulletLeft && pacTop == bulletTop){
+                        // alert("you are die!");
+                        die();              // openwin();
+                    }
+                }
+            }
+            function bullets() {
+                var output = '';
+                for(var i = 0; i < bullet.length; ++ i){
+                    output += "<div class='bullet' style = 'top:"+ bullet[i].y+"px; left:"+bullet[i].x+"px;'></div>";
+                    document.getElementById('bullet').innerHTML = output;
+                }
+            }
+
+            function bulletrun() {
+                bullet[0].y += 51;
+                if(bullet[0].y >356) {
+                bullet[0].y = 94;
+                bullet[0].x = 216;
+                }
+            }
+            function bulletrun2() {
+        //   for(var i = 0; i < bullet.length ; i ++) {
+                bullet[1].x += 52;
+                if(bullet[1].x > 560) {
+                bullet[1].y = 298;
+                bullet[1].x = 424;
+                }
+            }
+            function bulletrun3() {
+            //   for(var i = 0; i < bullet.length ; i ++) {
+                bullet[2].x += 52;
+                if(bullet[2].x > 716) {
+                bullet[2].y = 196;
+                bullet[2].x = 424;
+                }
+            }
+            function loop() {
+                bullets();
+                bulletAndDog();
+                bulletrun2();
+                bulletrun();
+                bulletrun3();
+            }
+            setInterval(loop,300)
+        }
+        bullett();
+        //**********************************************************************
+        function reset() {
+            heart --;
+        }
+
+        function restart() {
+            map = deepCopy(newmap);
+            Pikaman = {y : 1, x : 1}
+            heart = 6
+            hearts()
+            world();
+        }
+
+        function deepCopy(arr) {
+            let out = [], i = 0, len = arr.length;
+            for (; i < len; i++) {
+                if (arr[i] instanceof Array){
+                    out[i] = deepCopy(arr[i]);
+                }
+                else out[i] = arr[i];
+            }
+            return out;
+        }
+        //**************************************************************************
+        // function openwin() {
+        //     window.open("page.html " , 'newwindow = "oh! no"',"height = 200 ,width = 400, toolbar = no, scrollbars= no,resizable=no,location=no,status=no")}
+        //
+        // openwin();
+        //**************************************************************************
+
+        var Pikaman = {
+        y : 1,
+        x : 1
+        }, counts = 0;
+        document.onkeydown = function(e){
+            var right = map[Pikaman.y][Pikaman.x+1],
+                left = map[Pikaman.y][Pikaman.x-1],
+                up = map[Pikaman.y-1][Pikaman.x],
+                down = map[Pikaman.y+1][Pikaman.x];
+
+            if (e.keyCode == 37 && left!== 0 && left!== 2) {
+                // console.log('LIFT');
+                if (left== 6) {
+                    alert("win!");
+                }
+                map[Pikaman.y][Pikaman.x] = 1;
+                Pikaman.x -= 1;
+                map[Pikaman.y][Pikaman.x] = 9;
+                world();
+                document.getElementsByClassName('Pikaman')[0].style.transform = "rotateY(180deg)";
+                counts += 1;
+                if ( counts%3 == 0) {
+                    heart--;
+                    hearts();
+                }
+                if (left== 4 && heart <6){
+                    heart++;
+                    hearts();
+                }
+                if (!heart) {
+                    // alert("die!!!!!");
+                    die();
+                    // restart();
+                }
+            }
+
+            else if (e.keyCode == 38 && up !== 0 &&  up !== 2) {
+                // console.log('UP');
+                if (up == 6) {
+                    // alert("win!");
+                    win();
+                }
+                map[Pikaman.y][Pikaman.x] = 1;
+                Pikaman.y -= 1;
+                map[Pikaman.y][Pikaman.x] = 9;
+                world();
+                document.getElementsByClassName('Pikaman')[0].style.transform = "rotate(-90deg)";
+                counts += 1;
+                if ( counts%3 == 0) {
+                    heart--;
+                    hearts();
+                }
+                if (up == 4&& heart<6){
+                    heart++;
+                    hearts();
+                }
+                if (!heart) {
+                    // alert("die!!!!!");
+                    die();
+                    // restart();
+                }
+
+            }
+            else if (e.keyCode == 39 && right !== 0&& right!==2) {
+                // console.log('RIGHT');
+                if ( right == 6) {
+                    // alert("win!");
+                    win();
+                }
+                map[Pikaman.y][Pikaman.x] = 1;
+                Pikaman.x += 1;
+                map[Pikaman.y][Pikaman.x] = 9;
+                world();
+                counts += 1;
+                if ( counts%3 == 0) {
+                    heart--;
+                    hearts();
+                }
+                if (right == 4&& heart<6){
+                    heart++;
+                    hearts();
+                }
+                if (!heart) {
+                    // alert("die!!!!!");
+                    die();
+                    // restart();
+                }
+                // document.getElementsByClassName('Pikaman')[0].style.transform = "rotate(180deg)"
+            }
+            else if (e.keyCode == 40 && down !==0&& down!==2) {
+                // console.log('DOWN');
+                if( down == 6){
+                    // alert("win!");
+                    win();
+                }
+                map[Pikaman.y][Pikaman.x] = 1;
+                Pikaman.y += 1;
+                map[Pikaman.y][Pikaman.x] = 9;
+                world();
+                document.getElementsByClassName('Pikaman')[0].style.transform = "rotate(90deg)";
+                counts += 1;
+                if ( counts%3 == 0) {
+                    heart--;
+                    hearts();
+                }
+                if (down == 4&& heart<6){
+                    heart++;
+                    hearts();
+                }
+                if (!heart) {
+                    // alert("die!!!!!");
+                    die();
+                    // restart();
+                }
+
+            }
+        }
+
+    </script>
+</html>

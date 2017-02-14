@@ -1,0 +1,144 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.up{
+
+    width: 600px;
+      background: -webkit-linear-gradient(#1E90FF,#87CEFA,#1E90FF);
+}
+.up h1{
+    padding: 5px;
+    display: inline-block;
+}
+.up h3{
+    padding: 5px;
+    display: inline-block;
+    margin-left: 180px;
+}
+.about{
+    width: 600px;
+    height: 500px;
+    background: -webkit-radial-gradient(#E6E6FA,#FF69B4,#1E90FF);
+
+}
+.about img{
+    height: 200px;
+    margin: 10px;
+    display: inline-block;
+    border: 2px solid white;
+
+}
+#poc{
+    width: 150px;
+    height: 80px;
+}
+.word {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 10px;
+    width: 400px;
+    height: 206px;
+    background: #eee7ee
+}
+.word p{
+    background: -webkit-linear-gradient(#1E90FF,#87CEFA,#1E90FF);
+    height: 25px;
+    padding-left: 5px;
+}
+.word h6{
+
+    height:20px;
+    padding-left: 5px;
+
+}
+.word a{
+        background: #eee7ee;
+        height:20px;
+        padding-left: 5px;
+        font-size: 12px;
+}
+
+.center{
+    display: inline-block;
+    width: 190px;
+    padding: 0;
+    margin: 0;
+    /*background: -webkit-linear-gradient(#1E90FF,#87CEFA,#1E90FF);*/
+
+}
+.center img{
+    height: 122px;
+}
+#book{
+    height: 50px;
+    display: inline-block;
+    margin: 0 9px 0 9px;
+}
+.G img{
+    height:30px;
+}
+.content{
+        display: inline-block;
+        vertical-align: top;
+        /*margin-top: 10px;*/
+        width: 190px;
+        height: 226px;
+        background: #eee7ee
+}
+.center h6{
+    margin: 10px;
+}
+.center p{
+        background: -webkit-linear-gradient(#1E90FF,#87CEFA,#1E90FF);
+        margin-left: : 10px;
+}
+#us{
+    height: 110px;
+}
+/*/////////////////////////////////////*/
+.all {
+    margin: 0;
+    padding: 0;
+}
+.head {
+    width: 600px;
+    background-color: #fdf1e5;
+}
+.head img{
+    height: 70px;
+}
+.head h2{
+    display: inline-block;
+    vertical-align:bottom;
+}
+.head span{
+    color: 	#87CEFA;
+}
+#web{
+    color:#f0f4f8;
+    padding:10px;
+    background: linear-gradient(#24669e, #5182ab, #24669e);
+    margin: 0;
+    width: 900px;
+
+}
+/*/////////////////////////////*/
+.content h4{
+    
+}
+/*///////////////////////////////////*/
+.mid button{
+    font-size: 7px;
+    height: 25px;
+    width: 100px;
+    border-radius: 6px;
+    margin-left: 10px;
+}
+#b1{
+    background-color: #4781b2;
+}
+#b2{
+    background-color: #ef7c00;
+}

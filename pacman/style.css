@@ -1,0 +1,48 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: arial;
+}
+#wrapper {
+    width: 1250px;
+    margin: 30px auto;
+}
+    h2 {
+        margin: 10px 30px;
+    }
+        h2 span {
+            margin-right: 40px;
+        }
+    .row {
+        margin-bottom: -4px;
+    }
+        .row > div {
+            height: 50px;
+            width: 50px;
+            background-color: white;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            display: inline-block;
+        }
+        .row .wall{
+            background-size: 110%;
+            background-image: url("wall.png");
+        }
+        .row .coin{
+            background-size: 65%;
+            background-image: url("coins.gif");
+        }
+        .row .Pacman{
+            background-image: url("dog.gif");
+        }
+        .row .white{
+            background-color: white;
+        }
+        .row .cherry{
+            background-image: url("cherry.gif");
+        }
+        .row .ghost{
+            background-size: 80%;
+            background-image: url("ghost.gif");
+        }
